@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/user-login", "destination": "/user-login.html" },
+    { "source": "/supplier-login", "destination": "/supplier-login.html" }
+  ],
+  "trailingSlash": false
+}
