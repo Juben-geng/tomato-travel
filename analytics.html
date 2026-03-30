@@ -1,553 +1,294 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据分析中心 - AI旅游助手</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%); }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .chart-container { height: 300px; background: #f8fafc; border-radius: 12px; padding: 20px; }
-        .progress-bar { transition: width 1s ease; }
-        .rank-item { transition: all 0.2s; }
-        .rank-item:hover { background: #f8fafc; }
-        .tab-active { background: #667EEA; color: white; }
-        .table-row:hover { background: #f8fafc; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据分析 - 番茄旅行AI</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--p:#FF6B35;--a:#00C9A7;--bg:#F8F9FA;--t:#1A1A2E;--g:#6B7280;--b:rgba(26,58,74,0.1)}
+body{font-family:"Microsoft YaHei",sans-serif;background:var(--bg);color:var(--t)}
+.h{background:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;color:var(--p)}
+.nav{display:flex;gap:8px}
+.nav-btn{padding:8px 16px;border:none;background:0;border-radius:8px;cursor:pointer;font-weight:500;font-size:14px;color:var(--g)}
+.nav-btn.active{background:var(--p);color:#fff}
+.main{padding:24px}
+.ph{font-size:24px;font-weight:700;margin-bottom:20px}
+.filters{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--b);margin-bottom:20px;display:flex;gap:12px;align-items:center}
+.filter-g{display:flex;gap:8px;align-items:center}
+.filter-l{font-size:13px;font-weight:600}
+.filter-i{padding:6px 12px;border:1px solid var(--b);border-radius:6px;font-size:12px}
+.btn{padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-weight:600;font-size:12px;background:var(--p);color:#fff}
+.btn:hover{background:#E55A2B}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--b)}
+.stat-v{font-size:28px;font-weight:700;color:var(--p);margin-bottom:4px}
+.stat-l{font-size:12px;color:var(--g)}
+.stat-c{font-size:11px;color:var(--a);margin-top:4px}
+.charts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.chart-c{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--b)}
+.chart-t{font-weight:600;margin-bottom:12px;font-size:14px}
+.chart-w{position:relative;height:300px}
+.table-c{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--b)}
+.table-t{font-weight:600;margin-bottom:12px;font-size:14px}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{background:var(--bg);padding:10px;text-align:left;font-weight:600;border-bottom:1px solid var(--b)}
+.table td{padding:10px;border-bottom:1px solid var(--b)}
+.table tr:hover{background:var(--bg)}
+.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.badge-s{background:#D1FAE5;color:#065F46}
+.badge-w{background:#FEF3C7;color:#92400E}
+.badge-d{background:#FEE2E2;color:#991B1B}
+.export-btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:13px;background:var(--a);color:#fff}
+.export-btn:hover{background:#00B894}
+</style>
 </head>
-<body class="bg-gray-100">
-    <!-- Header -->
-    <header class="gradient-bg text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <a href="supplier-admin.html" class="text-white hover:text-gray-200 mr-4">
-                        <i class="fas fa-arrow-left text-xl"></i>
-                    </a>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                            <i class="fas fa-chart-bar text-purple-600 text-xl"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold">数据分析中心</h1>
-                            <p class="text-xs text-white text-opacity-80">智能数据可视化报表</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <select class="px-4 py-2 bg-white bg-opacity-20 rounded-lg text-white border-0 focus:outline-none">
-                        <option>今天</option>
-                        <option>近7天</option>
-                        <option selected>近30天</option>
-                        <option>本月</option>
-                        <option>本季度</option>
-                    </select>
-                    <button class="px-4 py-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30">
-                        <i class="fas fa-download mr-2"></i>导出报表
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+<body>
+<header class="h">
+<div class="logo" onclick="location.href='index.html'"><span>🍅 番茄旅行AI</span></div>
+<nav class="nav">
+<button class="nav-btn" onclick="location.href='index-full.html'">供应商</button>
+<button class="nav-btn" onclick="location.href='index-full.html'">AI助手</button>
+<button class="nav-btn active" onclick="location.href='analytics.html'">数据分析</button>
+<button class="nav-btn" onclick="location.href='admin-panel.html'">管理后台</button>
+</nav>
+</header>
 
-    <main class="container mx-auto px-4 py-6">
-        <!-- KPI Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-shopping-cart text-blue-600 text-xl"></i>
-                    </div>
-                    <span class="px-2 py-1 bg-green-100 text-green-600 rounded text-sm">
-                        <i class="fas fa-arrow-up mr-1"></i>+23.5%
-                    </span>
-                </div>
-                <p class="text-3xl font-bold text-gray-800">12,856</p>
-                <p class="text-gray-500 text-sm mt-1">总订单数</p>
-                <div class="mt-3 flex items-center text-sm">
-                    <span class="text-gray-400">上月:</span>
-                    <span class="ml-1 text-gray-600">10,412</span>
-                </div>
-            </div>
+<main class="main">
+<h1 class="ph">📊 数据分析中心</h1>
 
-            <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-yen-sign text-green-600 text-xl"></i>
-                    </div>
-                    <span class="px-2 py-1 bg-green-100 text-green-600 rounded text-sm">
-                        <i class="fas fa-arrow-up mr-1"></i>+18.2%
-                    </span>
-                </div>
-                <p class="text-3xl font-bold text-gray-800">¥856万</p>
-                <p class="text-gray-500 text-sm mt-1">总交易额</p>
-                <div class="mt-3 flex items-center text-sm">
-                    <span class="text-gray-400">上月:</span>
-                    <span class="ml-1 text-gray-600">¥724万</span>
-                </div>
-            </div>
+<!-- 筛选器 -->
+<div class="filters">
+<div class="filter-g">
+<label class="filter-l">日期范围：</label>
+<input type="date" class="filter-i" id="startDate">
+<span>至</span>
+<input type="date" class="filter-i" id="endDate">
+</div>
+<button class="btn" onclick="applyFilters()">查询</button>
+<button class="export-btn" onclick="exportReport()" style="margin-left:auto">📥 导出报告</button>
+</div>
 
-            <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-percentage text-purple-600 text-xl"></i>
-                    </div>
-                    <span class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded text-sm">
-                        <i class="fas fa-minus mr-1"></i>持平
-                    </span>
-                </div>
-                <p class="text-3xl font-bold text-gray-800">¥42.8万</p>
-                <p class="text-gray-500 text-sm mt-1">平台佣金</p>
-                <div class="mt-3 flex items-center text-sm">
-                    <span class="text-gray-400">佣金率:</span>
-                    <span class="ml-1 text-gray-600">5.0%</span>
-                </div>
-            </div>
+<!-- 统计卡片 -->
+<div class="stats">
+<div class="stat">
+<div class="stat-v" id="totalRevenue">¥0</div>
+<div class="stat-l">总收入</div>
+<div class="stat-c" id="revenueChange">↑ 12.5%</div>
+</div>
+<div class="stat">
+<div class="stat-v" id="totalOrders">0</div>
+<div class="stat-l">订单总数</div>
+<div class="stat-c" id="ordersChange">↑ 8.3%</div>
+</div>
+<div class="stat">
+<div class="stat-v" id="totalUsers">0</div>
+<div class="stat-l">新增用户</div>
+<div class="stat-c" id="usersChange">↑ 15.2%</div>
+</div>
+<div class="stat">
+<div class="stat-v" id="avgOrderValue">¥0</div>
+<div class="stat-l">平均订单额</div>
+<div class="stat-c">↑ 5.1%</div>
+</div>
+</div>
 
-            <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-users text-orange-600 text-xl"></i>
-                    </div>
-                    <span class="px-2 py-1 bg-green-100 text-green-600 rounded text-sm">
-                        <i class="fas fa-arrow-up mr-1"></i>+15.8%
-                    </span>
-                </div>
-                <p class="text-3xl font-bold text-gray-800">8,564</p>
-                <p class="text-gray-500 text-sm mt-1">活跃用户</p>
-                <div class="mt-3 flex items-center text-sm">
-                    <span class="text-gray-400">转化率:</span>
-                    <span class="ml-1 text-green-600">66.6%</span>
-                </div>
-            </div>
-        </div>
+<!-- 图表 -->
+<div class="charts">
+<div class="chart-c">
+<div class="chart-t">📈 收入趋势（近7天）</div>
+<div class="chart-w"><canvas id="revenueChart"></canvas></div>
+</div>
+<div class="chart-c">
+<div class="chart-t">📊 订单分布</div>
+<div class="chart-w"><canvas id="orderChart"></canvas></div>
+</div>
+<div class="chart-c">
+<div class="chart-t">🏆 供应商排名</div>
+<div class="chart-w"><canvas id="supplierChart"></canvas></div>
+</div>
+<div class="chart-c">
+<div class="chart-t">🎯 用户来源</div>
+<div class="chart-w"><canvas id="sourceChart"></canvas></div>
+</div>
+</div>
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Revenue Trend -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">
-                        <i class="fas fa-chart-line text-purple-500 mr-2"></i>收入趋势
-                    </h3>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 rounded-lg tab-active text-sm">日</button>
-                        <button class="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-sm hover:bg-gray-200">周</button>
-                        <button class="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-sm hover:bg-gray-200">月</button>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="h-full flex items-end justify-between space-x-2">
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 60%"></div>
-                            <span class="text-xs text-gray-500 mt-2">1日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 75%"></div>
-                            <span class="text-xs text-gray-500 mt-2">5日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 45%"></div>
-                            <span class="text-xs text-gray-500 mt-2">10日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 90%"></div>
-                            <span class="text-xs text-gray-500 mt-2">15日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 70%"></div>
-                            <span class="text-xs text-gray-500 mt-2">20日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 85%"></div>
-                            <span class="text-xs text-gray-500 mt-2">25日</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center">
-                            <div class="w-full bg-purple-500 rounded-t progress-bar" style="height: 95%"></div>
-                            <span class="text-xs text-gray-500 mt-2">30日</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center justify-between text-sm">
-                    <div class="text-center">
-                        <p class="text-gray-500">本月最高</p>
-                        <p class="font-bold text-purple-600">¥42.8万</p>
-                        <p class="text-xs text-gray-400">3月15日</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-gray-500">日均</p>
-                        <p class="font-bold text-blue-600">¥28.5万</p>
-                        <p class="text-xs text-gray-400">30天平均</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-gray-500">环比增长</p>
-                        <p class="font-bold text-green-600">+18.2%</p>
-                        <p class="text-xs text-gray-400">上月同期</p>
-                    </div>
-                </div>
-            </div>
+<!-- 数据表格 -->
+<div class="table-c">
+<div class="table-t">📋 最近订单</div>
+<table class="table">
+<thead>
+<tr>
+<th>订单ID</th>
+<th>用户</th>
+<th>供应商</th>
+<th>目的地</th>
+<th>金额</th>
+<th>状态</th>
+<th>日期</th>
+</tr>
+</thead>
+<tbody id="ordersTable">
+<tr><td colspan="7" style="text-align:center;color:var(--g)">暂无数据</td></tr>
+</tbody>
+</table>
+</div>
 
-            <!-- Order Distribution -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">
-                        <i class="fas fa-chart-pie text-orange-500 mr-2"></i>订单类型分布
-                    </h3>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="chart-container flex items-center justify-center">
-                        <div class="relative w-48 h-48">
-                            <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-90">
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#E5E7EB" stroke-width="20"></circle>
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#3B82F6" stroke-width="20" 
-                                    stroke-dasharray="113.1 251.3" stroke-dashoffset="0"></circle>
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#8B5CF6" stroke-width="20" 
-                                    stroke-dasharray="75.4 251.3" stroke-dashoffset="-113.1"></circle>
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#F97316" stroke-width="20" 
-                                    stroke-dasharray="37.7 251.3" stroke-dashoffset="-188.5"></circle>
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#10B981" stroke-width="20" 
-                                    stroke-dasharray="25.1 251.3" stroke-dashoffset="-226.2"></circle>
-                            </svg>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                <p class="text-2xl font-bold">12,856</p>
-                                <p class="text-xs text-gray-500">总订单</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-center space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <span class="w-4 h-4 bg-blue-500 rounded mr-2"></span>
-                                <span class="text-gray-600">机票预订</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="font-bold">5,785</span>
-                                <span class="text-gray-400 text-sm ml-1">45%</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <span class="w-4 h-4 bg-purple-500 rounded mr-2"></span>
-                                <span class="text-gray-600">酒店预订</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="font-bold">3,857</span>
-                                <span class="text-gray-400 text-sm ml-1">30%</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <span class="w-4 h-4 bg-orange-500 rounded mr-2"></span>
-                                <span class="text-gray-600">景点门票</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="font-bold">1,928</span>
-                                <span class="text-gray-400 text-sm ml-1">15%</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <span class="w-4 h-4 bg-green-500 rounded mr-2"></span>
-                                <span class="text-gray-600">其他服务</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="font-bold">1,286</span>
-                                <span class="text-gray-400 text-sm ml-1">10%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+</main>
 
-        <!-- Second Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <!-- Top Products -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="font-bold text-lg text-gray-800 mb-4">
-                    <i class="fas fa-fire text-red-500 mr-2"></i>热门产品TOP5
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex items-center">
-                        <span class="w-6 h-6 bg-red-500 text-white rounded flex items-center justify-center text-sm font-bold mr-3">1</span>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800">北京→三亚 机票</p>
-                            <p class="text-xs text-gray-500">销量 856 | 销售额 ¥215万</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-6 h-6 bg-orange-500 text-white rounded flex items-center justify-center text-sm font-bold mr-3">2</span>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800">三亚亚特兰蒂斯酒店</p>
-                            <p class="text-xs text-gray-500">销量 428 | 销售额 ¥128万</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-6 h-6 bg-yellow-500 text-white rounded flex items-center justify-center text-sm font-bold mr-3">3</span>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800">迪士尼门票</p>
-                            <p class="text-xs text-gray-500">销量 512 | 销售额 ¥24万</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-6 h-6 bg-gray-400 text-white rounded flex items-center justify-center text-sm font-bold mr-3">4</span>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800">上海→东京 机票</p>
-                            <p class="text-xs text-gray-500">销量 356 | 销售额 ¥89万</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="w-6 h-6 bg-gray-300 text-gray-600 rounded flex items-center justify-center text-sm font-bold mr-3">5</span>
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-800">故宫门票</p>
-                            <p class="text-xs text-gray-500">销量 486 | 销售额 ¥2.9万</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<script>
+var charts={};
+var allOrders=[];
 
-            <!-- Supplier Ranking -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="font-bold text-lg text-gray-800 mb-4">
-                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>供应商排名
-                </h3>
-                <div class="space-y-3">
-                    <div class="rank-item flex items-center p-3 rounded-lg">
-                        <span class="w-8 h-8 bg-yellow-400 text-white rounded-full flex items-center justify-center font-bold mr-3">
-                            <i class="fas fa-medal"></i>
-                        </span>
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800">携程旅游</p>
-                            <p class="text-xs text-gray-500">订单 1,256 | 销售额 ¥356万</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-purple-600">¥17.8万</p>
-                            <p class="text-xs text-gray-400">佣金</p>
-                        </div>
-                    </div>
-                    <div class="rank-item flex items-center p-3 rounded-lg">
-                        <span class="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold mr-3">
-                            <i class="fas fa-medal"></i>
-                        </span>
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800">途牛旅游</p>
-                            <p class="text-xs text-gray-500">订单 856 | 销售额 ¥228万</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-purple-600">¥11.4万</p>
-                            <p class="text-xs text-gray-400">佣金</p>
-                        </div>
-                    </div>
-                    <div class="rank-item flex items-center p-3 rounded-lg">
-                        <span class="w-8 h-8 bg-orange-300 text-white rounded-full flex items-center justify-center font-bold mr-3">
-                            <i class="fas fa-medal"></i>
-                        </span>
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800">同程旅游</p>
-                            <p class="text-xs text-gray-500">订单 612 | 销售额 ¥156万</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-purple-600">¥7.8万</p>
-                            <p class="text-xs text-gray-400">佣金</p>
-                        </div>
-                    </div>
-                    <div class="rank-item flex items-center p-3 rounded-lg">
-                        <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold mr-3">4</span>
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800">去哪儿网</p>
-                            <p class="text-xs text-gray-500">订单 486 | 销售额 ¥98万</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-purple-600">¥4.9万</p>
-                            <p class="text-xs text-gray-400">佣金</p>
-                        </div>
-                    </div>
-                    <div class="rank-item flex items-center p-3 rounded-lg">
-                        <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold mr-3">5</span>
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800">马蜂窝</p>
-                            <p class="text-xs text-gray-500">订单 324 | 销售额 ¥72万</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-purple-600">¥3.6万</p>
-                            <p class="text-xs text-gray-400">佣金</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+document.addEventListener('DOMContentLoaded',function(){
+  initCharts();
+  loadData();
+  setDefaultDates();
+});
 
-            <!-- User Analytics -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="font-bold text-lg text-gray-800 mb-4">
-                    <i class="fas fa-user-chart text-blue-500 mr-2"></i>用户分析
-                </h3>
-                
-                <div class="space-y-4">
-                    <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-600">新增用户</span>
-                            <span class="font-bold text-blue-600">+1,286</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 75%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 bg-gradient-to-r from-green-50 to-teal-50 rounded-lg">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-600">活跃率</span>
-                            <span class="font-bold text-green-600">66.6%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 66%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-600">付费转化</span>
-                            <span class="font-bold text-orange-600">8.5%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-orange-500 h-2 rounded-full" style="width: 8.5%"></div>
-                        </div>
-                    </div>
-                </div>
+function setDefaultDates(){
+  var end=new Date();
+  var start=new Date(end.getTime()-7*24*60*60*1000);
+  document.getElementById('startDate').value=formatDate(start);
+  document.getElementById('endDate').value=formatDate(end);
+}
 
-                <div class="mt-4 pt-4 border-t">
-                    <div class="grid grid-cols-2 gap-4 text-center">
-                        <div>
-                            <p class="text-2xl font-bold text-purple-600">8.5</p>
-                            <p class="text-xs text-gray-500">平均订单价值(万)</p>
-                        </div>
-                        <div>
-                            <p class="text-2xl font-bold text-blue-600">2.3</p>
-                            <p class="text-xs text-gray-500">人均订单数</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+function formatDate(d){
+  var m=(d.getMonth()+1).toString().padStart(2,'0');
+  var day=d.getDate().toString().padStart(2,'0');
+  return d.getFullYear()+'-'+m+'-'+day;
+}
 
-        <!-- Recent Orders Table -->
-        <div class="bg-white rounded-xl shadow-sm">
-            <div class="p-4 border-b flex items-center justify-between">
-                <h3 class="font-bold text-gray-800">
-                    <i class="fas fa-list text-gray-400 mr-2"></i>最近订单
-                </h3>
-                <div class="flex items-center space-x-4">
-                    <input type="text" placeholder="搜索订单..." class="px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-500 text-sm">
-                    <select class="px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-500 text-sm">
-                        <option>全部类型</option>
-                        <option>机票</option>
-                        <option>酒店</option>
-                        <option>门票</option>
-                    </select>
-                </div>
-            </div>
-            <table class="w-full">
-                <thead class="bg-gray-50">
-                    <tr class="text-left text-gray-500 text-sm">
-                        <th class="p-4 font-medium">订单号</th>
-                        <th class="p-4 font-medium">用户</th>
-                        <th class="p-4 font-medium">产品</th>
-                        <th class="p-4 font-medium">金额</th>
-                        <th class="p-4 font-medium">供应商</th>
-                        <th class="p-4 font-medium">状态</th>
-                        <th class="p-4 font-medium">时间</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y">
-                    <tr class="table-row">
-                        <td class="p-4 font-mono text-sm">#TK20240301056</td>
-                        <td class="p-4">
-                            <p class="font-semibold">张小姐</p>
-                            <p class="text-xs text-gray-500">138****8888</p>
-                        </td>
-                        <td class="p-4">
-                            <p class="text-sm">北京→三亚机票</p>
-                            <p class="text-xs text-gray-500">经济舱 × 1</p>
-                        </td>
-                        <td class="p-4 font-bold">¥2,580</td>
-                        <td class="p-4 text-sm">携程旅游</td>
-                        <td class="p-4"><span class="px-2 py-1 bg-green-100 text-green-600 rounded text-xs">已完成</span></td>
-                        <td class="p-4 text-sm text-gray-500">03-01 10:25</td>
-                    </tr>
-                    <tr class="table-row">
-                        <td class="p-4 font-mono text-sm">#HT20240301055</td>
-                        <td class="p-4">
-                            <p class="font-semibold">李先生</p>
-                            <p class="text-xs text-gray-500">139****6666</p>
-                        </td>
-                        <td class="p-4">
-                            <p class="text-sm">三亚亚特兰蒂斯</p>
-                            <p class="text-xs text-gray-500">海景房 × 3晚</p>
-                        </td>
-                        <td class="p-4 font-bold">¥8,880</td>
-                        <td class="p-4 text-sm">途牛旅游</td>
-                        <td class="p-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded text-xs">待支付</span></td>
-                        <td class="p-4 text-sm text-gray-500">03-01 10:18</td>
-                    </tr>
-                    <tr class="table-row">
-                        <td class="p-4 font-mono text-sm">#TJ20240301054</td>
-                        <td class="p-4">
-                            <p class="font-semibold">王女士</p>
-                            <p class="text-xs text-gray-500">136****5555</p>
-                        </td>
-                        <td class="p-4">
-                            <p class="text-sm">迪士尼门票</p>
-                            <p class="text-xs text-gray-500">成人票 × 2</p>
-                        </td>
-                        <td class="p-4 font-bold">¥950</td>
-                        <td class="p-4 text-sm">同程旅游</td>
-                        <td class="p-4"><span class="px-2 py-1 bg-blue-100 text-blue-600 rounded text-xs">处理中</span></td>
-                        <td class="p-4 text-sm text-gray-500">03-01 10:05</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="p-4 border-t flex items-center justify-between">
-                <p class="text-sm text-gray-500">显示 1-10 条，共 12,856 条</p>
-                <div class="flex items-center space-x-2">
-                    <button class="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50" disabled><i class="fas fa-chevron-left"></i></button>
-                    <button class="px-3 py-1 bg-purple-600 text-white rounded">1</button>
-                    <button class="px-3 py-1 border rounded hover:bg-gray-50">2</button>
-                    <button class="px-3 py-1 border rounded hover:bg-gray-50">3</button>
-                    <span class="px-2">...</span>
-                    <button class="px-3 py-1 border rounded hover:bg-gray-50">1286</button>
-                    <button class="px-3 py-1 border rounded hover:bg-gray-50"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </div>
-    </main>
+function initCharts(){
+  // 收入趋势
+  var revenueCtx=document.getElementById('revenueChart').getContext('2d');
+  charts.revenue=new Chart(revenueCtx,{
+    type:'line',
+    data:{
+      labels:['周一','周二','周三','周四','周五','周六','周日'],
+      datasets:[{
+        label:'收入(元)',
+        data:[2400,1398,9800,3908,4800,3800,4300],
+        borderColor:'#FF6B35',
+        backgroundColor:'rgba(255,107,53,0.1)',
+        tension:0.4,
+        fill:true
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+  });
 
-    <script>
-        // Tab switching
-        document.querySelectorAll('[class*="tab-"]').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('[class*="tab-"]').forEach(t => {
-                    if (t.classList.contains('tab-active')) {
-                        t.classList.remove('tab-active');
-                        t.classList.add('bg-gray-100', 'text-gray-600');
-                    }
-                });
-                this.classList.add('tab-active');
-                this.classList.remove('bg-gray-100', 'text-gray-600');
-            });
-        });
+  // 订单分布
+  var orderCtx=document.getElementById('orderChart').getContext('2d');
+  charts.order=new Chart(orderCtx,{
+    type:'doughnut',
+    data:{
+      labels:['已完成','进行中','待支付','已取消'],
+      datasets:[{
+        data:[45,30,20,5],
+        backgroundColor:['#00C9A7','#FF6B35','#FFB347','#E0E0E0']
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+  });
 
-        // Animate progress bars on load
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.progress-bar').forEach(bar => {
-                const height = bar.style.height;
-                bar.style.height = '0';
-                setTimeout(() => {
-                    bar.style.height = height;
-                }, 100);
-            });
-        });
-    </script>
+  // 供应商排名
+  var supplierCtx=document.getElementById('supplierChart').getContext('2d');
+  charts.supplier=new Chart(supplierCtx,{
+    type:'bar',
+    data:{
+      labels:['普吉岛地接','泰享旅游','沙巴风情','巴厘岛梦幻','包车老陈'],
+      datasets:[{
+        label:'订单数',
+        data:[45,38,32,28,25],
+        backgroundColor:'#FF6B35'
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}}}
+  });
+
+  // 用户来源
+  var sourceCtx=document.getElementById('sourceChart').getContext('2d');
+  charts.source=new Chart(sourceCtx,{
+    type:'pie',
+    data:{
+      labels:['直接访问','搜索引擎','社交媒体','推荐'],
+      datasets:[{
+        data:[35,25,25,15],
+        backgroundColor:['#FF6B35','#00C9A7','#FFB347','#667EEA']
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+  });
+}
+
+function loadData(){
+  try{
+    allOrders=JSON.parse(localStorage.getItem('orders')||'[]');
+  }catch(e){}
+  
+  updateStats();
+  renderOrdersTable();
+}
+
+function updateStats(){
+  var revenue=allOrders.reduce(function(sum,o){return sum+(o.amount||0)},0);
+  var count=allOrders.length;
+  var avg=count>0?Math.round(revenue/count):0;
+  
+  document.getElementById('totalRevenue').textContent='¥'+revenue;
+  document.getElementById('totalOrders').textContent=count;
+  document.getElementById('totalUsers').textContent=Math.floor(count*0.8);
+  document.getElementById('avgOrderValue').textContent='¥'+avg;
+}
+
+function renderOrdersTable(){
+  var html=allOrders.slice(0,10).map(function(o){
+    var status=o.status||'进行中';
+    var badge='badge-s';
+    if(status==='待支付')badge='badge-w';
+    if(status==='已取消')badge='badge-d';
+    return'<tr><td>'+o.id+'</td><td>'+o.user+'</td><td>'+o.supplier+'</td><td>'+o.dest+'</td><td>¥'+o.amount+'</td><td><span class="badge '+badge+'">'+status+'</span></td><td>'+(o.date||'2026-03-30')+'</td></tr>';
+  }).join('');
+  document.getElementById('ordersTable').innerHTML=html||'<tr><td colspan="7" style="text-align:center;color:var(--g)">暂无数据</td></tr>';
+}
+
+function applyFilters(){
+  var start=document.getElementById('startDate').value;
+  var end=document.getElementById('endDate').value;
+  console.log('筛选日期:',start,'到',end);
+  updateStats();
+  renderOrdersTable();
+}
+
+function exportReport(){
+  var start=document.getElementById('startDate').value;
+  var end=document.getElementById('endDate').value;
+  var revenue=allOrders.reduce(function(sum,o){return sum+(o.amount||0)},0);
+  var count=allOrders.length;
+  
+  var report='番茄旅行AI 数据分析报告\n';
+  report+='生成时间: '+new Date().toLocaleString()+'\n';
+  report+='日期范围: '+start+' 至 '+end+'\n\n';
+  report+='=== 关键指标 ===\n';
+  report+='总收入: ¥'+revenue+'\n';
+  report+='订单总数: '+count+'\n';
+  report+='平均订单额: ¥'+(count>0?Math.round(revenue/count):0)+'\n';
+  report+='新增用户: '+Math.floor(count*0.8)+'\n\n';
+  report+='=== 最近订单 ===\n';
+  allOrders.slice(0,5).forEach(function(o){
+    report+=o.id+' | '+o.user+' | '+o.supplier+' | ¥'+o.amount+' | '+o.status+'\n';
+  });
+  
+  var blob=new Blob([report],{type:'text/plain'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='数据分析报告_'+new Date().getTime()+'.txt';
+  a.click();
+}
+</script>
 </body>
 </html>
