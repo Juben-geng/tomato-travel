@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--p:#FF6B35;--a:#00C9A7;--bg:#F8F9FA;--t:#1A1A2E;--g:#6B7280;--b:rgba(26,58,74,0.1)}
-body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t)}
+body{font-family:"Microsoft YaHei",sans-serif;background:var(--bg);color:var(--t)}
 .h{background:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;color:var(--p);cursor:pointer}
 .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--p),var(--a));border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -31,7 +31,7 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 .ch{display:flex;justify-content:space-between;margin-bottom:10px}
 .cn{font-weight:600}
 .ct{font-size:10px;padding:3px 8px;border-radius:4px;background:#FFF3E0;color:#E65100}
-.ct.酒店{background:#E3F2FD;color:#1565C0}.ct.交通{background:#E8F5E9;color:#2E7D32}.ct.景区{background:#E0F7FA;color:#00838F}
+.ct-h{background:#E3F2FD;color:#1565C0}.ct-t{background:#E8F5E9;color:#2E7D32}.ct-q{background:#E0F7FA;color:#00838F}
 .cr{font-size:12px;color:var(--g);margin-bottom:8px}
 .ctags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
 .tag{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--bg);color:var(--g)}
@@ -49,12 +49,14 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 .toggle-btn{width:28px;height:28px;border:1px solid var(--b);border-radius:6px;background:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .toggle-btn:hover{background:var(--p);color:#fff}
 .chist{flex:1;overflow-y:auto;padding:8px;max-height:calc(100vh - 160px)}
+.chist::-webkit-scrollbar{width:4px}
 .chist-hint{text-align:center;color:var(--g);font-size:12px;padding:10px}
 .hitem{padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--g);margin-bottom:4px;position:relative}
 .hitem:hover{background:var(--bg)}
 .hitem.active{background:var(--p);color:#fff}
 .hitem-time{font-size:10px;opacity:0.7;margin-bottom:2px}
 .hitem-title{cursor:text;word-break:break-all}
+.hitem-title:hover{background:rgba(0,0,0,0.05);border-radius:4px;padding:2px}
 .hitem-actions{position:absolute;right:4px;top:50%;transform:translateY(-50%);display:none;gap:4px}
 .hitem:hover .hitem-actions{display:flex}
 .hact-btn{width:20px;height:20px;border-radius:4px;border:1px solid var(--b);background:#fff;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
@@ -87,12 +89,10 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 .quick-btn{padding:4px 10px;background:var(--bg);border:1px solid var(--b);border-radius:12px;font-size:11px;cursor:pointer}
 .quick-btn:hover{background:var(--p);color:#fff}
 .input-wrapper{position:relative;min-width:300px;max-width:800px;width:100%}
-.ci{flex:1;width:100%;padding:10px 50px 10px 14px;border:1px solid var(--b);border-radius:20px;font-size:13px;resize:none;min-height:42px;max-height:300px;overflow-y:auto;font-family:inherit;line-height:1.5;background:#fff}
+.input-area{position:relative;width:100%}
+.ci{flex:1;width:100%;padding:10px 50px 10px 14px;border:1px solid var(--b);border-radius:20px;font-size:13px;resize:none;min-height:42px;max-height:300px;overflow-y:auto;font-family:inherit;line-height:1.5;background:#fff;box-sizing:border-box;display:block}
 .ci:focus{outline:none;border-color:var(--p)}
-.ci.dragging{border-color:var(--p);border-style:dashed;background:rgba(255,107,53,0.05)}
-.size-indicator{position:absolute;top:-22px;right:0;font-size:10px;color:var(--g);background:#fff;padding:2px 6px;border-radius:4px;display:none;border:1px solid var(--b)}
-.input-wrapper.dragging .size-indicator{display:block}
-.resize-handle{position:absolute;right:10px;bottom:10px;width:20px;height:20px;cursor:se-resize;opacity:0.4;transition:opacity 0.2s;font-size:18px;line-height:1;color:var(--g)}
+.resize-handle{position:absolute;right:10px;bottom:10px;width:20px;height:20px;cursor:se-resize;opacity:0.4;transition:opacity 0.2s;font-size:18px;line-height:1;color:var(--g);user-select:none}
 .resize-handle:hover{opacity:1}
 .irow{display:flex;gap:8px;align-items:flex-end}
 .sbtn{width:42px;height:42px;border-radius:50%;background:var(--p);color:#fff;border:none;cursor:pointer;font-size:16px;flex-shrink:0}
@@ -133,6 +133,7 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 <a href="user-login.html" style="padding:6px 12px;border:1px solid var(--b);border-radius:6px;color:var(--t)">登录</a>
 </div>
 </header>
+
 <div id="suppliersPage" class="main">
 <aside class="sidebar">
 <div class="fg"><label class="fl">搜索</label><input type="text" class="fi" id="searchInput" placeholder="供应商名称..."></div>
@@ -149,6 +150,7 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 <div class="grid" id="suppliersGrid"></div>
 </main>
 </div>
+
 <div id="aiPage" class="chat-p">
 <div class="cl">
 <aside class="cs" id="chatSidebar">
@@ -174,9 +176,11 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 <span class="quick-btn" onclick="fillQuick('巴厘岛6天5晚，高端定制，8000元/人')">高端定制</span>
 </div>
 <div class="irow">
-<div class="input-wrapper" id="inputWrapper">
+<div class="input-wrapper">
+<div class="input-area" id="inputArea">
 <textarea class="ci" id="chatInput" rows="1" placeholder="输入客户需求，可拖拽右下角调整大小..." oninput="autoResize(this)"></textarea>
-<div class="resize-handle" id="resizeHandle">⋰</div>
+<div class="resize-handle" id="resizeHandle" title="拖拽调整大小">⋰</div>
+</div>
 </div>
 <button class="sbtn" onclick="sendMessage()">➤</button>
 </div>
@@ -184,9 +188,11 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 </main>
 </div>
 </div>
+
 <div id="destinationsPage" class="main" style="display:none">
 <main class="content"><h2 style="margin-bottom:20px">热门目的地</h2><div class="dest-g" id="destGrid"></div></main>
 </div>
+
 <div class="modal" id="detailModal"><div class="m"><div class="mh"><div class="mt" id="detailTitle">详情</div><button class="mc" onclick="closeModal()">×</button></div><div class="mb" id="detailBody"></div></div></div>
 <div class="modal" id="chatModal"><div class="m" style="max-width:450px"><div class="mh"><div class="mt">💬 沟通</div><button class="mc" onclick="closeChat()">×</button></div><div class="mb"><div id="chatOrderInfo" style="margin-bottom:12px;padding:10px;background:#FFF9F5;border-radius:8px"></div><div id="chatMessagesBox" style="max-height:300px;overflow-y:auto;margin-bottom:12px"></div><div class="irow"><input type="text" id="msgInput" placeholder="输入消息..." style="flex:1;padding:8px;border:1px solid var(--b);border-radius:8px"><button class="sbtn" style="width:36px;height:36px;font-size:14px" onclick="sendChatMsg()">➤</button></div></div></div></div>
 <div class="toast-c" id="toastContainer"></div>
@@ -195,30 +201,37 @@ body{font-family:'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--t
 var suppliers=[{id:"sup_001",name:"普吉岛阳光地接社",type:"地接社",region:"普吉岛",wechat:"sunny_phuket",price:"800-5000",tags:["亲子游","蜜月"],rating:4.8,advantage:"24小时接机,中文导游"},{id:"sup_002",name:"泰享旅游",type:"地接社",region:"普吉岛",wechat:"thai_enjoy",price:"1000-6000",tags:["高端定制"],rating:4.9,advantage:"专属管家"},{id:"sup_003",name:"沙巴风情地接社",type:"地接社",region:"沙巴",wechat:"sabah_travel",price:"600-4000",tags:["亲子游"],rating:4.7,advantage:"亲子活动丰富"},{id:"sup_004",name:"巴厘岛梦幻假期",type:"地接社",region:"巴厘岛",wechat:"bali_dream",price:"900-5500",tags:["蜜月","SPA"],rating:4.8,advantage:"蜜月布置"},{id:"sup_005",name:"普吉岛包车老陈",type:"交通",region:"普吉岛",wechat:"phuket_car_chen",price:"300-1500",tags:["包车"],rating:5.0,advantage:"华人司机"},{id:"sup_006",name:"泰国签证小助手",type:"签证",region:"泰国",wechat:"thai_visa888",price:"280",tags:["加急"],rating:4.9,advantage:"加急1天出签"},{id:"sup_007",name:"卡塔棕榈度假村",type:"酒店",region:"普吉岛",email:"booking@katatani.com",price:"400-2000",tags:["海景房"],rating:4.7,advantage:"一线海景"},{id:"sup_008",name:"皮皮岛快艇一日游",type:"景区",region:"普吉岛",wechat:"ppisland_tour",price:"350-600",tags:["浮潜"],rating:4.6,advantage:"专业教练"}];
 var destinations=[{name:"普吉岛",country:"泰国",tags:["海岛","亲子","蜜月"],budget:4000},{name:"沙巴",country:"马来西亚",tags:["海岛","亲子"],budget:3500},{name:"巴厘岛",country:"印尼",tags:["蜜月","SPA"],budget:4500},{name:"苏梅岛",country:"泰国",tags:["海岛","浪漫"],budget:5000},{name:"马尔代夫",country:"马尔代夫",tags:["奢华","蜜月"],budget:12000}];
 var currentUser=null,chatHistory=[],currentOrder=null;
-document.addEventListener('DOMContentLoaded',function(){checkLogin();renderSuppliers();renderDestinations();loadHistory();initResize();});
-function checkLogin(){try{var u=JSON.parse(localStorage.getItem('current_user')||'null');if(u&&u.username){currentUser=u;document.getElementById('userBox').style.display='block';document.getElementById('userName').textContent=u.username;document.getElementById('logoutBtn').style.display='block';document.querySelector('a[href="user-login.html"]').style.display='none'}}catch(e){}}
-function logout(){if(confirm('确定退出?')){localStorage.remove('current_user');location.reload()}}
-function switchTab(tab){document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});event.target.classList.add('active');document.getElementById('suppliersPage').style.display=tab==='suppliers'?'grid':'none';document.getElementById('aiPage').classList.toggle('active',tab==='ai');document.getElementById('destinationsPage').style.display=tab==='destinations'?'block':'none'}
-function renderSuppliers(){document.getElementById('suppliersGrid').innerHTML=suppliers.map(function(s){var tags=s.tags.map(function(t){return'<span class="tag">'+t+'</span>'}).join('');return'<div class="card" onclick="showDetail(\''+s.id+'\')"><div class="ch"><span class="cn">'+s.name+'</span><span class="ct '+s.type+'">'+s.type+'</span></div><div class="cr">'+s.region+'</div><div class="ctags">'+tags+'</div><div class="cprice">¥'+s.price+'</div><div class="cact"><button class="cbtn" onclick="event.stopPropagation();showDetail(\''+s.id+'\')">详情</button><button class="cbtn" onclick="event.stopPropagation();openChat(\''+s.id+'\')">💬沟通</button></div></div>'}).join('')}
-function renderDestinations(){document.getElementById('destGrid').innerHTML=destinations.map(function(d){var tags=d.tags.map(function(t){return'<span class="tag">'+t+'</span>'}).join('');return'<div class="dest-c"><div class="dest-n">'+d.name+'</div><div class="dest-co">'+d.country+'</div><div class="ctags">'+tags+'</div><div class="dest-b">建议¥'+d.budget+'</div></div>'}).join('')}
-function applyFilters(){var s=document.getElementById('searchInput').value.toLowerCase();var t=document.getElementById('typeFilter').value;var r=document.getElementById('regionFilter').value;var f=suppliers.filter(function(x){return(!s||x.name.toLowerCase().indexOf(s)>-1)&&(!t||x.type===t)&&(!r||x.region===r)});document.getElementById('suppliersGrid').innerHTML=f.length?f.map(function(x){return'<div class="card"><div class="ch"><span class="cn">'+x.name+'</span><span class="ct '+x.type+'">'+x.type+'</span></div><div class="cr">'+x.region+'</div><div class="cprice">¥'+x.price+'</div><div class="cact"><button class="cbtn">详情</button><button class="cbtn" onclick="openChat(\''+x.id+'\')">💬沟通</button></div></div>'}).join(''):'<div style="text-align:center;padding:40px">无结果</div>'}
-function showDetail(id){var s=suppliers.find(function(x){return x.id===id});document.getElementById('detailTitle').textContent=s.name;document.getElementById('detailBody').innerHTML='<div style="margin-bottom:8px"><span class="ct '+s.type+'">'+s.type+'</span></div><div style="color:var(--g);margin-bottom:8px">'+s.region+'</div><div style="font-weight:600;color:var(--p);margin-bottom:8px">¥'+s.price+'</div><div style="margin-bottom:8px"><b>优势:</b> '+s.advantage+'</div><div style="margin-bottom:16px"><b>联系方式:</b> '+(s.wechat||s.email||'')+'</div><button class="btn" style="width:100%" onclick="openChat(\''+s.id+'\')">💬 立即沟通</button>';document.getElementById('detailModal').classList.add('active')}
-function closeModal(){document.getElementById('detailModal').classList.remove('active')}
-function openChat(id){if(!currentUser){alert('请先登录');location.href='user-login.html';return;}closeModal();var s=suppliers.find(function(x){return x.id===id});var orders=JSON.parse(localStorage.getItem('user_orders')||'[]');var o=orders.find(function(x){return x.user_id===currentUser.user_id&&x.supplier_id===id});if(!o){o={order_id:'o_'+Date.now(),user_id:currentUser.user_id,supplier_id:id,supplier_name:s.name,messages:[],created_at:Date.now()};orders.push(o);localStorage.setItem('user_orders',JSON.stringify(orders))}currentOrder=o;document.getElementById('chatOrderInfo').innerHTML='<b>'+s.name+'</b><br><span style="color:var(--g);font-size:12px">'+s.advantage+'</span>';renderChatMessages();document.getElementById('chatModal').classList.add('active')}
-function closeChat(){document.getElementById('chatModal').classList.remove('active');currentOrder=null}
-function renderChatMessages(){if(!currentOrder)return;var msgs=currentOrder.messages||[];document.getElementById('chatMessagesBox').innerHTML=msgs.length?msgs.map(function(m){var bg=m.from==='user'?'background:var(--p);color:#fff':'background:#fff;border:1px solid var(--b)';return'<div style="margin-bottom:8px;text-align:'+(m.from==='user'?'right':'left')+'"><div style="display:inline-block;padding:8px 12px;border-radius:8px;max-width:80%;'+bg+'">'+m.text+'</div></div>'}).join(''):'<div style="text-align:center;color:var(--g);padding:20px">暂无消息</div>'}
-function sendChatMsg(){if(!currentOrder)return;var text=document.getElementById('msgInput').value.trim();if(!text)return;currentOrder.messages.push({from:'user',text:text,time:Date.now()});var orders=JSON.parse(localStorage.getItem('user_orders')||'[]');var idx=orders.findIndex(function(x){return x.order_id===currentOrder.order_id});if(idx>-1)orders[idx]=currentOrder;localStorage.setItem('user_orders',JSON.stringify(orders));document.getElementById('msgInput').value='';renderChatMessages();var self=this;setTimeout(function(){var replies=['您好!感谢咨询','好的,您的需求已收到','收到!我们会尽快回复'];currentOrder.messages.push({from:'supplier',text:replies[Math.floor(Math.random()*replies.length)],time:Date.now()});var orders=JSON.parse(localStorage.getItem('user_orders')||'[]');var idx=orders.findIndex(function(x){return x.order_id===currentOrder.order_id});if(idx>-1)orders[idx]=currentOrder;localStorage.setItem('user_orders',JSON.stringify(orders));renderChatMessages();showToast('新消息',currentOrder.supplier_name+'回复了您')},1500)}
-function parseReq(msg){var r={dest:'',days:5,people:2,budget:4000,type:[]};var dests=['普吉岛','沙巴','巴厘岛','苏梅岛','马尔代夫'];for(var i=0;i<dests.length;i++){if(msg.indexOf(dests[i])>-1){r.dest=dests[i];break}}var dm=msg.match(/(\d+)天/);if(dm)r.days=parseInt(dm[1]);var pm=msg.match(/(\d+)人/);if(pm)r.people=parseInt(pm[1]);var bm=msg.match(/(\d+)元/);if(bm)r.budget=parseInt(bm[1]);if(msg.indexOf('蜜月')>-1)r.type.push('蜜月');if(msg.indexOf('亲子')>-1)r.type.push('亲子游');return r}
+document.addEventListener("DOMContentLoaded",function(){checkLogin();renderSuppliers();renderDestinations();loadHistory();initResize();});
+function checkLogin(){try{var u=JSON.parse(localStorage.getItem("current_user")||"null");if(u&&u.username){currentUser=u;document.getElementById("userBox").style.display="block";document.getElementById("userName").textContent=u.username;document.getElementById("logoutBtn").style.display="block";document.querySelector("a[href=\"user-login.html\"]").style.display="none"}}catch(e){}}
+function logout(){if(confirm("确定退出?")){localStorage.remove("current_user");location.reload()}}
+function switchTab(tab){document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.remove("active")});event.target.classList.add("active");document.getElementById("suppliersPage").style.display=tab==="suppliers"?"grid":"none";document.getElementById("aiPage").classList.toggle("active",tab==="ai");document.getElementById("destinationsPage").style.display=tab==="destinations"?"block":"none"}
+function renderSuppliers(){document.getElementById("suppliersGrid").innerHTML=suppliers.map(function(s){var tags=s.tags.map(function(t){return"<span class=\"tag\">"+t+"</span>"}).join("");var ct=s.type==="酒店"?"ct-h":s.type==="交通"?"ct-t":s.type==="景区"?"ct-q":"";return"<div class=\"card\" onclick=\"showDetail(\'"+s.id+"\')\"><div class=\"ch\"><span class=\"cn\">"+s.name+"</span><span class=\"ct "+ct+"\">"+s.type+"</span></div><div class=\"cr\">"+s.region+"</div><div class=\"ctags\">"+tags+"</div><div class=\"cprice\">¥"+s.price+"</div><div class=\"cact\"><button class=\"cbtn\" onclick=\"event.stopPropagation();showDetail(\'"+s.id+"\')\">详情</button><button class=\"cbtn\" onclick=\"event.stopPropagation();openChat(\'"+s.id+"\')\">💬沟通</button></div></div>"}).join("")}
+function renderDestinations(){document.getElementById("destGrid").innerHTML=destinations.map(function(d){var tags=d.tags.map(function(t){return"<span class=\"tag\">"+t+"</span>"}).join("");return"<div class=\"dest-c\"><div class=\"dest-n\">"+d.name+"</div><div class=\"dest-co\">"+d.country+"</div><div class=\"ctags\">"+tags+"</div><div class=\"dest-b\">建议¥"+d.budget+"</div></div>"}).join("")}
+function applyFilters(){var s=document.getElementById("searchInput").value.toLowerCase();var t=document.getElementById("typeFilter").value;var r=document.getElementById("regionFilter").value;var f=suppliers.filter(function(x){return(!s||x.name.toLowerCase().indexOf(s)>-1)&&(!t||x.type===t)&&(!r||x.region===r)});document.getElementById("suppliersGrid").innerHTML=f.length?f.map(function(x){var ct=x.type==="酒店"?"ct-h":x.type==="交通"?"ct-t":x.type==="景区"?"ct-q":"";return"<div class=\"card\"><div class=\"ch\"><span class=\"cn\">"+x.name+"</span><span class=\"ct "+ct+"\">"+x.type+"</span></div><div class=\"cr\">"+x.region+"</div><div class=\"cprice\">¥"+x.price+"</div><div class=\"cact\"><button class=\"cbtn\">详情</button><button class=\"cbtn\" onclick=\"openChat(\'"+x.id+"\')\">💬沟通</button></div></div>"}).join(""):"<div style=\"text-align:center;padding:40px\">无结果</div>"}
+function showDetail(id){var s=suppliers.find(function(x){return x.id===id});document.getElementById("detailTitle").textContent=s.name;document.getElementById("detailBody").innerHTML="<div style=\"margin-bottom:8px\"><span class=\"ct\">"+s.type+"</span></div><div style=\"color:var(--g);margin-bottom:8px\">"+s.region+"</div><div style=\"font-weight:600;color:var(--p);margin-bottom:8px\">¥"+s.price+"</div><div style=\"margin-bottom:8px\"><b>优势:</b> "+s.advantage+"</div><div style=\"margin-bottom:16px\"><b>联系方式:</b> "+(s.wechat||s.email||"")+"</div><button class=\"btn\" style=\"width:100%\" onclick=\"openChat(\'"+s.id+"\')\">💬 立即沟通</button>";document.getElementById("detailModal").classList.add("active")}
+function closeModal(){document.getElementById("detailModal").classList.remove("active")}
+function openChat(id){if(!currentUser){alert("请先登录");location.href="user-login.html";return;}closeModal();var s=suppliers.find(function(x){return x.id===id});var orders=JSON.parse(localStorage.getItem("user_orders")||"[]");var o=orders.find(function(x){return x.user_id===currentUser.user_id&&x.supplier_id===id});if(!o){o={order_id:"o_"+Date.now(),user_id:currentUser.user_id,supplier_id:id,supplier_name:s.name,messages:[],created_at:Date.now()};orders.push(o);localStorage.setItem("user_orders",JSON.stringify(orders))}currentOrder=o;document.getElementById("chatOrderInfo").innerHTML="<b>"+s.name+"</b><br><span style=\"color:var(--g);font-size:12px\">"+s.advantage+"</span>";renderChatMessages();document.getElementById("chatModal").classList.add("active")}
+function closeChat(){document.getElementById("chatModal").classList.remove("active");currentOrder=null}
+function renderChatMessages(){if(!currentOrder)return;var msgs=currentOrder.messages||[];document.getElementById("chatMessagesBox").innerHTML=msgs.length?msgs.map(function(m){var bg=m.from==="user"?"background:var(--p);color:#fff":"background:#fff;border:1px solid var(--b)";return"<div style=\"margin-bottom:8px;text-align:"+(m.from==="user"?"right":"left")+"\"><div style=\"display:inline-block;padding:8px 12px;border-radius:8px;max-width:80%;"+bg+"\">"+m.text+"</div></div>"}).join(""):"<div style=\"text-align:center;color:var(--g);padding:20px\">暂无消息</div>"}
+function sendChatMsg(){if(!currentOrder)return;var text=document.getElementById("msgInput").value.trim();if(!text)return;currentOrder.messages.push({from:"user",text:text,time:Date.now()});var orders=JSON.parse(localStorage.getItem("user_orders")||"[]");var idx=orders.findIndex(function(x){return x.order_id===currentOrder.order_id});if(idx>-1)orders[idx]=currentOrder;localStorage.setItem("user_orders",JSON.stringify(orders));document.getElementById("msgInput").value="";renderChatMessages();setTimeout(function(){var replies=["您好!感谢咨询","好的,您的需求已收到","收到!我们会尽快回复"];currentOrder.messages.push({from:"supplier",text:replies[Math.floor(Math.random()*replies.length)],time:Date.now()});var orders=JSON.parse(localStorage.getItem("user_orders")||"[]");var idx=orders.findIndex(function(x){return x.order_id===currentOrder.order_id});if(idx>-1)orders[idx]=currentOrder;localStorage.setItem("user_orders",JSON.stringify(orders));renderChatMessages();showToast("新消息",currentOrder.supplier_name+"回复了您")},1500)}
+function parseReq(msg){var r={dest:"",days:5,people:2,budget:4000,type:[]};var dests=["普吉岛","沙巴","巴厘岛","苏梅岛","马尔代夫"];for(var i=0;i<dests.length;i++){if(msg.indexOf(dests[i])>-1){r.dest=dests[i];break}}var dm=msg.match(/(\d+)天/);if(dm)r.days=parseInt(dm[1]);var pm=msg.match(/(\d+)人/);if(pm)r.people=parseInt(pm[1]);var bm=msg.match(/(\d+)元/);if(bm)r.budget=parseInt(bm[1]);if(msg.indexOf("蜜月")>-1)r.type.push("蜜月");if(msg.indexOf("亲子")>-1)r.type.push("亲子游");return r}
 function matchSuppliers(req){var m=suppliers.filter(function(s){if(req.dest&&s.region.indexOf(req.dest)===-1)return false;if(req.type.length>0){var hit=req.type.some(function(t){return s.tags.indexOf(t)>-1});if(!hit)return false}return true});m.sort(function(a,b){return b.rating-a.rating});return m.slice(0,4)}
-function fillQuick(t){document.getElementById('chatInput').value=t}
-function setMode(el){document.querySelectorAll('.mbadge').forEach(function(b){b.classList.remove('active')});el.classList.add('active')}
-function toggleSidebar(){var sidebar=document.getElementById('chatSidebar');sidebar.classList.toggle('collapsed');var btn=sidebar.querySelector('.toggle-btn');btn.textContent=sidebar.classList.contains('collapsed')?'▶':'☰'}
-function clearHistory(){if(confirm('确定清空所有历史?')){chatHistory=[];localStorage.setItem('chatHistory','[]');renderHistory()}}
-function loadHistory(){try{var s=localStorage.getItem('chatHistory');if(s){chatHistory=JSON.parse(s);renderHistory()}}catch(e){}}
-function renderHistory(){var el=document.getElementById('chatHistory');if(!el)return;if(chatHistory.length===0){el.innerHTML='<div class="chist-hint">暂无历史</div>';return}var html=chatHistory.map(function(h,i){var d=new Date(h.time);var timeStr=(d.getMonth()+1)+'/'+d.getDate()+' '+pad(d.getHours())+':'+pad(d.getMinutes());return'<div class="hitem'+(i===0?' active':'')+'" data-index="'+i+'"><div class="hitem-time">'+timeStr+'</div><div class="hitem-title" onclick="event.stopPropagation();editTitle('+i+')" title="点击编辑标题">'+h.title+'</div><div class="hitem-actions"><button class="hact-btn" onclick="event.stopPropagation();deleteHistory('+i+')" title="删除">🗑</button></div></div>'}).join('');el.innerHTML=html}
-function pad(n){return n<10?'0'+n:n}
-function loadHistoryItem(i){if(i<chatHistory.length){document.getElementById('chatInput').value=chatHistory[i].msg;renderHistory()}}
-function editTitle(i){var newTitle=prompt('修改标题:',chatHistory[i].title);if(newTitle&&newTitle.trim()){chatHistory[i].title=newTitle.trim();localStorage.setItem('chatHistory',JSON.stringify(chatHistory));renderHistory()}}
-function deleteHistory(i){if(confirm('删除此历史?')){chatHistory.splice(i,1);localStorage.setItem('chatHistory',JSON.stringify(chatHistory));renderHistory()}}
-function addToHistory(msg){try{var d=new Date();var title=msg.substring(0,20)+(msg.length>20?'...':'');chatHistory.unshift({msg:msg,time:Date.now(),title:title});if(chatHistory.length>50)chatHistory.pop();localStorage.setItem('chatHistory',JSON.stringify(chatHistory));renderHistory()}catch(e){}}
-function sendMessage(){var input=document.getElementById('chatInput');var msg=input.value.trim();if(!msg)return;var m=document.getElementById('chatMessages');m.innerHTML+='<div class="msg user"><div class="bubble user">'+msg.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div>';m.innerHTML+='<div class="msg ai"><div class="bubble ai" style="color:var(--
+function fillQuick(t){document.getElementById("chatInput").value=t}
+function setMode(el){document.querySelectorAll(".mbadge").forEach(function(b){b.classList.remove("active")});el.classList.add("active")}
+function toggleSidebar(){var sidebar=document.getElementById("chatSidebar");sidebar.classList.toggle("collapsed");var btn=sidebar.querySelector(".toggle-btn");btn.textContent=sidebar.classList.contains("collapsed")?"▶":"☰"}
+function clearHistory(){if(confirm("确定清空所有历史?")){chatHistory=[];localStorage.setItem("chatHistory","[]");renderHistory()}}
+function loadHistory(){try{var s=localStorage.getItem("chatHistory");if(s){chatHistory=JSON.parse(s);renderHistory()}}catch(e){}}
+function renderHistory(){var el=document.getElementById("chatHistory");if(!el)return;if(chatHistory.length===0){el.innerHTML="<div class=\"chist-hint\">暂无历史</div>";return}var html=chatHistory.map(function(h,i){var d=new Date(h.time);var timeStr=(d.getMonth()+1)+"月"+d.getDate()+"日 "+pad(d.getHours())+":"+pad(d.getMinutes());return"<div class=\"hitem"+(i===0?" active":"")+"\" data-index=\""+i+"\"><div class=\"hitem-time\">"+timeStr+"</div><div class=\"hitem-title\" onclick=\"event.stopPropagation();editTitle("+i+")\" title=\"点击编辑标题\">"+h.title+"</div><div class=\"hitem-actions\"><button class=\"hact-btn\" onclick=\"event.stopPropagation();deleteHistory("+i+")\" title=\"删除\">🗑</button></div></div>"}).join("");el.innerHTML=html}
+function pad(n){return n<10?"0"+n:n}
+function loadHistoryItem(i){if(i<chatHistory.length){document.getElementById("chatInput").value=chatHistory[i].msg;renderHistory()}}
+function editTitle(i){var newTitle=prompt("修改标题:",chatHistory[i].title);if(newTitle&&newTitle.trim()){chatHistory[i].title=newTitle.trim();localStorage.setItem("chatHistory",JSON.stringify(chatHistory));renderHistory()}}
+function deleteHistory(i){if(confirm("删除此历史?")){chatHistory.splice(i,1);localStorage.setItem("chatHistory",JSON.stringify(chatHistory));renderHistory()}}
+function addToHistory(msg){try{var title=msg.substring(0,20)+(msg.length>20?"...":"");chatHistory.unshift({msg:msg,time:Date.now(),title:title});if(chatHistory.length>50)chatHistory.pop();localStorage.setItem("chatHistory",JSON.stringify(chatHistory));renderHistory()}catch(e){}}
+function sendMessage(){var input=document.getElementById("chatInput");var msg=input.value.trim();if(!msg)return;var m=document.getElementById("chatMessages");m.innerHTML+="<div class=\"msg user\"><div class
+function sendMessage(){var input=document.getElementById("chatInput");var msg=input.value.trim();if(!msg)return;var m=document.getElementById("chatMessages");m.innerHTML+="<div class=\"msg user\"><div class=\"bubble user\">"+msg.replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</div></div>";m.innerHTML+="<div class=\"msg ai\"><div class=\"bubble ai\" style=\"color:var(--g)\">⏳ 智能匹配中...</div></div>";m.scrollTop=m.scrollHeight;input.value="";input.style.height="42px";addToHistory(msg);setTimeout(function(){var req=parseReq(msg);var matched=matchSuppliers(req);var html="<b>📋 行程方案</b><br><br>📍 目的地: "+(req.dest||"待定")+"<br>📅 天数: "+req.days+"天<br>👥 人数: "+req.people+"人<br>💰 预算: ¥"+req.budget+"/人<br><br><b>🏨 推荐行程</b><br>";for(var i=1;i<=req.days;i++){html+="Day"+i+": 景点游览/特色体验<br>"}html+="<br><b>🏢 推荐供应商</b><br><br>";if(matched.length===0){html+="暂未找到匹配的供应商"}else{matched.forEach(function(s){html+="<div class=\"rec-item\" onclick=\"openChat('"+s.id+"')\" ><div class=\"rec-h\"><span style=\"font-weight:600\">"+s.name+"</span><span class=\"rec-s\">★"+s.rating+"</span></div><div style=\"font-size:11px;color:var(--g);margin-top:4px\">"+s.region+" | "+s.tags.join(", ")+"</div></div>"})}var lastAi=m.querySelector(".msg.ai:last-child");if(lastAi)lastAi.innerHTML="<div class=\"bubble ai\">"+html+"</div>";m.scrollTop=m.scrollHeight},800)}
+function autoResize(el){el.style.height="auto";var h=Math.min(Math.max(el.scrollHeight,42),300);el.style.height=h+"px"}
+function initResize(){var handle=document.getElementById("resizeHandle");var area=document.getElementById("inputArea");var ci=document.getElementById("chatInput");if(!handle||!area||!ci)return;var startX,startY,startW,startH;handle.addEventListener("mousedown",function(e){e.preventDefault();startX=e.clientX;startY=e.clientY;startW=ci.offsetWidth;startH=ci.offsetHeight;document.addEventListener("mousemove",onDrag);document.addEventListener("mouseup",stopDrag)});function onDrag(e){var dw=e.clientX-startX;var dh=e.clientY-startY;var nw=Math.min(Math.max(startW+dw,300),800);var nh=Math.min(Math.max(startH+dh,42),300);ci.style.width=nw+"px";ci.style.height=nh+"px";ci.style.maxHeight="none";ci.style.resize="none"}function stopDrag(){document.removeEventListener("mousemove",onDrag);document.removeEventListener("mouseup",stopDrag)}}
+function showToast(title,msg){var c=document.getElementById("toastContainer");var t=document.createElement("div");t.className="toast";t.innerHTML="<div class=\"th\"><span class=\"tt\">"+title+"</span><button onclick=\"this.parentElement.parentElement.remove()\">×</button></div><div style=\"font-size:12px;color:var(--g)\">"+msg+"</div><div class=\"tp\"></div>";c.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},5000)}
+function handleFile(input){var file=input.files[0];if(file)document.getElementById("chatInput").value+=" ["+file.name+"]";input.value=""}
+function promptLink(){var url=prompt("请输入链接:");if(url)document.getElementById("chatInput").value+=" ["+url+"]"}
+</script></body></html>
