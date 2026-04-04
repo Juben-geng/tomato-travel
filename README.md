@@ -1,67 +1,57 @@
-# 🍅 番茄旅行AI
+# 番茄旅行AI助手
 
-> AI驱动的旅游定制师平台 — 智能匹配供应商，一键生成行程方案
+🍅 企业级AI驱动旅游定制师平台 — 智能匹配供应商，一键生成行程方案
 
-## 🌐 在线访问
+## 🚀 在线演示
 
-部署于 Vercel，访问地址见项目设置。
-
-## 📂 页面说明
-
-| 文件 | 功能 |
-|------|------|
-| index.html | 🏠 首页 — 产品介绍与入口 |
-| index-full.html | 🤖 AI助手 — 供应商列表 + AI智能匹配 + 目的地 |
-| admin-panel.html | 🔐 管理后台 — 用户/供应商/权限管理 |
-| analytics.html | 📊 数据分析 — 收入趋势/订单分布/导出报告 |
-| supplier-admin.html | 🏢 供应商后台 — 供应商管理界面 |
-| supplier-login.html | 🔑 供应商登录 |
-| user-login.html | 👤 用户登录/注册 |
-| payment.html | 💳 支付页面 |
+**Vercel 部署地址**: [https://tomato-travel.vercel.app](https://tomato-travel.vercel.app)
 
 ## ✨ 核心功能
 
-### AI助手页面 (index-full.html)
-- 🤖 智能匹配供应商（输入需求自动推荐）
-- 📝 输入框可自由拖拽调整大小（右下角手柄）
-- 📋 左侧历史记录面板（可折叠/展开）
-- 🕐 历史记录显示时间戳（格式：3月30日 17:00）
-- ✏️ 历史记录标题可编辑（点击标题修改）
-- 💬 供应商在线沟通
+### 🏨 实时酒店比价
+- 多平台价格对比（途牛 + 飞猪 + 携程 + Booking + Agoda）
+- 支持城市查询 + 酒店名搜索
+- 实时价格、评分、取消政策
+- 一键预订链接
 
-### 管理后台 (admin-panel.html)
-- 🔐 管理员登录验证
-- 👥 用户注册管理（新增/编辑/删除）
-- 🏢 供应商管理（新增/编辑/删除/认证）
-- 🔑 权限管理
-- 📋 订单管理
+### 🤖 AI智能助手
+- 自然语言查询酒店价格
+- 智能匹配供应商
+- 行程方案生成
 
-### 数据分析 (analytics.html)
-- 📈 收入趋势图（近7天）
-- 🍩 订单状态分布
-- 🏆 供应商排名
-- 🎯 用户来源分析
-- 📥 导出报告（TXT格式）
+### 💬 真实聊天系统
+- 用户和供应商真实沟通
+- 消息通知 + 附件上传
+- 收藏保存 + 自动回复
 
-## 🎨 设计规范
+## 📦 部署说明
 
-| 颜色 | 用途 |
-|------|------|
-| `#FF6B35` 番茄橙 | 主色调 |
-| `#00C9A7` 薄荷绿 | 辅助色 |
-| `#667EEA` 紫色 | 管理后台主色 |
+### Vercel 一键部署
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Juben-geng/tomato-travel)
+
+### 环境变量
+
+| 变量名 | 说明 |
+|--------|------|
+| FLYAI_API_URL | 飞猪API地址（可选） |
 
 ## 🛠️ 技术栈
 
-- 纯 HTML + CSS + JavaScript
-- localStorage 本地数据存储
-- Chart.js 图表（analytics.html）
-- 无外部依赖（除 Chart.js CDN）
+- 前端: HTML + CSS + JavaScript
+- 后端: Vercel Serverless Functions
+- 数据: localStorage + 飞猪/途牛 API
 
-## 🚀 部署
+## 📄 文件说明
 
-项目通过 Vercel 自动部署，推送到 `main` 分支即可触发。
+| 文件 | 功能 |
+|------|------|
+| index.html | 🏠 首页 |
+| hotel-price-comparison.html | 🏨 酒店比价 |
+| index-full.html | 🤖 AI助手 |
+| admin-panel.html | 🔐 管理后台 |
+| api/hotel/search.js | 📡 酒店API |
 
 ---
 
-_番茄旅行AI 🍅 — 让旅游定制更智能_
+🍅 番茄旅行AI — 让旅游定制更智能
